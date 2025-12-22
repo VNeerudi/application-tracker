@@ -16,6 +16,11 @@ ENV/
 .env
 .env.local
 
+# Local app data / personal artifacts (do not commit)
+backend/uploads/
+backend/resumes/
+backend/user_profile.json
+
 # Node
 node_modules/
 dist/
