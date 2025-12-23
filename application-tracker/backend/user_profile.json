@@ -1,0 +1,168 @@
+{
+  "personal_info": {
+    "name": "Suryakailash Ramesh",
+    "email": "sairamsuryakailash@gmail.com",
+    "phone": "2068415219",
+    "location": "Seattle, WA",
+    "linkedin": "https://www.linkedin.com/in/suryakailash",
+    "portfolio": "https://suryakailash.netlify.app/",
+    "github": "https://www.github.com/suryakailash-risk"
+  },
+  "summary": "Passionate Data Scientist & BI Engineer specializing in building scalable data infrastructure and predictive analytics. I design end-to-end pipelines that process terabytes of telemetry data, develop ML models that improve system performance by 20%, and create real-time dashboards that empower data-driven decision making.\n\nExpert in Python, SQL, Azure, and Power BI with a track record of automating critical analytics workflows and delivering measurable business impact. From anomaly detection to forecasting models, I transform raw data into strategic insights that drive operational excellence and competitive advantage.",
+  "skills": [
+    "Data & Analytics",
+    "ETL/ELT",
+    "Data Validation & Quality",
+    "Data Modelling",
+    "Applied Statistics",
+    "Qualitative Research",
+    "BI & Reporting",
+    "Tableau",
+    "Power BI",
+    "Power Query",
+    "Power Pivot",
+    "Excel",
+    "SQL",
+    "R",
+    "Python",
+    "Programming & APIs",
+    "Python (FastAPI",
+    "Flask)",
+    "R (tidyverse)",
+    "RESTful service design",
+    "Angular",
+    "Databases",
+    "PostgreSQL",
+    "MongoDB (NoSQL)",
+    "MySQL Server",
+    "Cloud & DevOps",
+    "Azure Data Factory",
+    "Azure Data Explorer",
+    "Azure Functions",
+    "Microsoft Fabric",
+    "Machine Learning & AI",
+    "Machine Learning",
+    "Deep Learning",
+    "NLP",
+    "LLMs",
+    "Scikit-learn",
+    "XGBoost",
+    "Data Science",
+    "Software Engineering",
+    "REST APIs",
+    "Microservices",
+    "Agile",
+    "TDD",
+    "MVC",
+    "Design Patterns",
+    "Tools",
+    "Jira",
+    "Visual Studio",
+    "Production Support",
+    "Linux",
+    "Postman"
+  ],
+  "experience": [
+    {
+      "title": "AI Developer",
+      "company": "Qjump.AI",
+      "location": "Redmond, Washington, United States",
+      "start_date": "",
+      "end_date": "",
+      "description": [
+        "• Building telemetry-driven analytics infrastructure to track system uptime, latency, and error propagation across distributed services.",
+        "• Automating data ingestion and transformation pipelines (Python, SQL, Azure Data Factory), handling structured and semi-structured data at scale.",
+        "• Deploying forecasting models (XGBoost) for usage and capacity trends, improving prediction accuracy by 20% and enabling proactive scaling.",
+        "• Integrating anomaly-detection scripts for performance metrics, reducing manual debugging time by 45%.",
+        "• Designing and deploying real-time Power BI dashboards with automated alerts, enhancing visibility of operational KPIs by 60%."
+      ]
+    },
+    {
+      "title": "Search Language Model Developer",
+      "company": "Shoperies NE LLC",
+      "location": "Redmond, Washington, United States",
+      "start_date": "",
+      "end_date": "",
+      "description": [
+        "•",
+        "Developed an advanced semantic search model using LLM language model, enhancing search accuracy and user satisfaction by accurately capturing user intent and delivering relevant results.",
+        "•",
+        "Selected LLM for its efficiency and semantic understanding capabilities, fine-tuned with domain-specific data, and implemented to improve semantic processing of queries.",
+        "•",
+        "Established a benchmark using metrics such as precision, recall, Mean Average Precision (MAP), and Normalized Discounted Cumulative Gain (NDCG), demonstrating approximately 30% higher accuracy than the existing search solution.",
+        "•",
+        "Notably excelled in handling complex queries requiring deeper semantic understanding.",
+        "•",
+        "Skills: GPT, GPT-4, LLM, Semantic Search, Machine Learning, Data Analysis, Python, Azure Databricks"
+      ]
+    },
+    {
+      "title": "Packaged App Development Analyst",
+      "company": "Accenture",
+      "location": "Chennai, Tamil Nadu, India",
+      "start_date": "",
+      "end_date": "",
+      "description": [
+        "•",
+        "Spearheaded data analysis using Python, leading to the implementation of new strategies, improving tool performance by 10%.",
+        "•",
+        "Utilized Power BI to develop efficient data models, reducing processing time by 60%.",
+        "•",
+        "Awarded 'Gamification Recognition' for outstanding Power Automate idea at a Microsoft event.",
+        "•",
+        "Skills: Data Modeling, Master Data Management, Power BI, Power Automate, Python, Data Analysis",
+        "•",
+        "Automated processes with Python, achieving a 20% reduction in processing time and 30% improvement in image-processing speed.",
+        "•",
+        "Collaborated on a machine learning model development for IoT anomaly detection, enhancing accuracy by 10% using Azure DPS, Stream Analytics, Blob Storage, and Central IoT.",
+        "•",
+        "Skills: Microsoft Azure, Data Modeling, Python, Machine Learning, IoT, Azure Stream Analytics, Azure Blob Storage.",
+        "•",
+        "Developed a single-page application with Angular, attracting 100,000 unique visitors in the first month for a client project.",
+        "•",
+        "Implemented multiprocessing in Python Flask for backend development and SQL for a logistics company, improving server processing efficiency.",
+        "•",
+        "Skills: Microsoft Azure, Data Engineering, Angular, Python, Flask, SQL, Full-Stack Development"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master of Science in Data Science (MSDS)",
+      "school": "Seattle University",
+      "location": "Seattle, WA",
+      "graduation_date": "2025",
+      "gpa": "",
+      "honors": ""
+    }
+  ],
+  "projects": [],
+  "certifications": [],
+  "languages": [],
+  "publications": [
+    {
+      "title": "Intelligent Car",
+      "authors": "R. Suryakailash, P. Rathinakumar, S. Atchaya and L Sripriyadharshini",
+      "journal": " Journal of Physics: Conference Series, Volume 1804, International Conference of Modern Applications on Information and Communication Technology (ICMAICT) 22-23 October 2020",
+      "date": "",
+      "url": "https://iopscience.iop.org/article/10.1088/1742-6596/1804/1/012157"
+    }
+  ],
+  "awards": [
+    {
+      "name": "Gamified Performer",
+      "issuer": "Accenture",
+      "date": "",
+      "description": ""
+    },
+    {
+      "name": "Top 10 Icon of ECE",
+      "issuer": "SRMIST",
+      "date": "",
+      "description": ""
+    }
+  ],
+  "volunteer_work": [],
+  "portfolio_text": "Home☀️\nAbout\nExperience\nSkills\nProjects\nEducation\nCertifications\nAchievements\nTestimonials\nContact\nHey there! 👋 I'm\n\nSurya Kailash Ramesh\nPublished Researcher|\n\nTurning data chaos into beautiful insights ✨ | 5+ years of building smart systems that actually make a difference. Love working with ML, cloud tech, and making numbers tell stories.\n\n🚀 View My Work\n💬 Let's Chat\nAbout Me\nDrag to rotate • Scroll to zoom\nPassionate Data Scientist & BI Engineer specializing in building scalable data infrastructure and predictive analytics. I design end-to-end pipelines that process terabytes of telemetry data, develop ML models that improve system performance by 20%, and create real-time dashboards that empower data-driven decision making.\n\nExpert in Python, SQL, Azure, and Power BI with a track record of automating critical analytics workflows and delivering measurable business impact. From anomaly detection to forecasting models, I transform raw data into strategic insights that drive operational excellence and competitive advantage.\n\n5+\nYears Experience\n\n20%\nPrediction Accuracy Improvement\n\n65%\nCompliance Reporting Time Reduction\n\nProfessional Experience\nFull-time\nFull-Stack AI Developer\nQjump.AI\n\nGreater Seattle Area · Remote\nSep 2025 - Present · 3 mos\n•\nBuilding telemetry-driven analytics infrastructure to track system uptime, latency, and error propagation across distributed services.\n•\nAutomating data ingestion and transformation pipelines (Python, SQL, Azure Data Factory), handling structured and semi-structured data at scale.\n•\nDeploying forecasting models (XGBoost) for usage and capacity trends, improving prediction accuracy by 20% and enabling proactive scaling.\n•\nIntegrating anomaly-detection scripts for performance metrics, reducing manual debugging time by 45%.\n•\nDesigning and deploying real-time Power BI dashboards with automated alerts, enhancing visibility of operational KPIs by 60%.\n\nHide Details\nInternship\nSearch Language Model Developer\nShoperies NE LLC\n\nRedmond, Washington, United States · On-site\nJan 2025 - Jun 2025 · 6 mos\n•\nDeveloped an advanced semantic search model using LLM language model, enhancing search accuracy and user satisfaction by accurately capturing user intent and delivering relevant results.\n•\nSelected LLM for its efficiency and semantic understanding capabilities, fine-tuned with domain-specific data, and implemented to improve semantic processing of queries.\n•\nEstablished a benchmark using metrics such as precision, recall, Mean Average Precision (MAP), and Normalized Discounted Cumulative Gain (NDCG), demonstrating approximately 30% higher accuracy than the existing search solution.\n•\nNotably excelled in handling complex queries requiring deeper semantic understanding.\n•\nSkills: GPT, GPT-4, LLM, Semantic Search, Machine Learning, Data Analysis, Python, Azure Databricks\n\nHide Details\nFull-time · Hybrid\nPackaged App Development Analyst\nAccenture\n\nChennai, Tamil Nadu, India\nMar 2023 - Aug 2023 · 6 mos\n•\nSpearheaded data analysis using Python, leading to the implementation of new strategies, improving tool performance by 10%.\n•\nUtilized Power BI to develop efficient data models, reducing processing time by 60%.\n•\nAwarded 'Gamification Recognition' for outstanding Power Automate idea at a Microsoft event.\n•\nSkills: Data Modeling, Master Data Management, Power BI, Power Automate, Python, Data Analysis\n\nHide Details\nFull-time\nAssociate Software Analyst\nAccenture\n\nChennai, Tamil Nadu, India\nSep 2022 - Apr 2023 · 8 mos\n•\nAutomated processes with Python, achieving a 20% reduction in processing time and 30% improvement in image-processing speed.\n•\nCollaborated on a machine learning model development for IoT anomaly detection, enhancing accuracy by 10% using Azure DPS, Stream Analytics, Blob Storage, and Central IoT.\n•\nSkills: Microsoft Azure, Data Modeling, Python, Machine Learning, IoT, Azure Stream Analytics, Azure Blob Storage\n\nHide Details\nFull-time · Hybrid\nAssociate Software Engineer\nAccenture\n\nChennai, Tamil Nadu, India\nAug 2020 - Sep 2022 · 2 yrs 1 mo\n•\nDeveloped a single-page application with Angular, attracting 100,000 unique visitors in the first month for a client project.\n•\nImplemented multiprocessing in Python Flask for backend development and SQL for a logistics company, improving server processing efficiency.\n•\nSkills: Microsoft Azure, Data Engineering, Angular, Python, Flask, SQL, Full-Stack Development\n\nHide Details\nFull-time\nProject Engineer\nNokia\n\nGreater Chennai Area\nJul 2019 - Jun 2020 · 1 yr\n•\nDesigned and implemented an IoT solution for image detection and processing using Python, Postgres, Flask, SSD ML, and Azure Cloud.\n•\nDeveloped Flask web applications for UI and API integration, and trained a SSD ML model for object, face, and emotion recognition.\n•\nManaged IoT devices using Python scripts and orchestrated the cloud-based IoT solution using Azure Cloud services.\n•\nWorked in web application development (React.JS and Node.JS), PDF extraction RPA (UI PATH), attendance system, Pick by light and Warehouse Visualization.\n•\nSkills: Data Engineering, Master Data Management, Python, Flask, PostgreSQL, Machine Learning, IoT, Azure Cloud, Computer Vision, React.JS, Node.JS, UI PATH\n\nHide Details\nTechnical Skills\n\nCollapse All\nData & Analytics\n•\nETL/ELT\n•\nData Validation & Quality\n•\nData Modelling\n•\nApplied Statistics\n•\nQualitative Research\nBI & Reporting\n•\nTableau\n•\nPower BI\n•\nPower Query\n•\nPower Pivot\n•\nExcel\n•\nSQL\n•\nR\n•\nPython\nProgramming & APIs\n•\nPython (FastAPI, Flask)\n•\nR (tidyverse)\n•\nSQL\n•\nRESTful service design\n•\nAngular\nDatabases\n•\nPostgreSQL\n•\nMongoDB (NoSQL)\n•\nMySQL Server\nCloud & DevOps\n•\nAzure Data Factory\n•\nAzure Data Explorer\n•\nAzure Functions\n•\nMicrosoft Fabric\nMachine Learning & AI\n•\nMachine Learning\n•\nDeep Learning\n•\nNLP\n•\nLLMs\n•\nScikit-learn\n•\nXGBoost\n•\nData Science\nSoftware Engineering\n•\nREST APIs\n•\nMicroservices\n•\nAgile\n•\nTDD\n•\nMVC\n•\nDesign Patterns\nTools\n•\nJira\n•\nVisual Studio\n•\nProduction Support\n•\nLinux\n•\nPostman\nFeatured Projects\nData-driven solutions and innovative applications\n\nAll Projects\nFeatured\nCapstone\nLive Projects\nSemantic Product Search Platform\nFeatured\nAI-Powered Search Engine\n\nqjump.AI\nJun 2025 – Present\nDeveloped an advanced semantic search platform for products that leverages LLM-based embeddings to transform traditional keyword search into intelligent semantic search. The system achieves 35% better search results compared to traditional like and contains search methods by understanding the semantic meaning and context of search queries.\n\nKey Contributions:\n•\nDesigned and implemented semantic search architecture using LLM embeddings for product search\n•\nEmbedded product descriptions and search queries into semantic vector space for intelligent matching\n•\nIntegrated vector database for efficient storage and retrieval of embedded product data\n•\nBuilt React frontend with modern UI/UX for seamless search experience\n•\nDeveloped FastAPI backend with optimized search algorithms and API endpoints\n•\nDeployed full-stack application on VPS using Docker for containerization and scalability\n•\nAchieved 35% improvement in search result relevance compared to traditional keyword search\nReact\nFastAPI\nLLM\nVector Database\nDocker\nVPS\nPython\nSemantic Search\nEmbeddings\nView Live Project\n\nShow Less\nPlanning and Mission Effectiveness Demographic Data History\nCapstone\nArchdiocese of Seattle (MSDS 25.2 Capstone Project)\n\nSeattle University\nJan 2025 – Jun 2025\nPartnered with the Archdiocese of Seattle to support the Partners in the Gospel initiative through data-driven pastoral planning. Analyzed historical and current data across 136 parishes to uncover demographic and engagement trends.\n\nKey Contributions:\n•\nIntegrated parish sacramental, financial, household, and Mass attendance data with U.S. Census demographics into a unified SQLite database\n•\nARIMA forecasting predicted 1.44% decline in parish households, enabling proactive resource planning\n•\nOLS & Lasso regression identified key drivers of young adult engagement\n•\nGIS mapping identified areas with high Spanish-speaking populations but no Spanish-language Masses\n•\nDelivered visualizations and dashboards highlighting community gaps and engagement opportunities\nOutcome:\nDelivered data-informed insights, predictive models, and visual dashboards to empower the Archdiocese in resource allocation, outreach, and strategic planning.\n\nSQLite\nARIMA\nOLS Regression\nLasso Regression\nGIS\nData Visualization\nPython\nR\n\nShow Less\nNASA Space App (My Sleep Tool)\nFeatured\nNASA Space Apps Challenge\n2024\nA comprehensive tool designed for astronauts to calculate BMR, track required calories, and monitor nutrition. The application provides nutritious food recommendations when nutrition levels are low, tracks calories consumed and burned during workouts, and intelligently schedules sleep based on 15 health and sleep quality parameters.\n\nKey Contributions:\n•\nDeveloped BMR calculation system using NASA-qualified formulas for accurate metabolic rate assessment\n•\nImplemented nutrition tracking and recommendation system that suggests nutritious foods when levels are low\n•\nBuilt calorie tracking system to monitor calories consumed and burned during daily workouts\n•\nCreated intelligent sleep scheduling algorithm that considers 15 health and sleep quality parameters\n•\nDesigned comprehensive dashboard with data visualization for monitoring astronaut health metrics\nPython\nMachine Learning\nData Analysis\nHealth Analytics\nNutrition Tracking\nSleep Scheduling\n\nShow Less\nHourly Load Prediction for New Hampshire Using ML\nSeattle University\nOct 2023 – Nov 2023\nDeveloped predictive models for hourly electricity demand in New Hampshire by leveraging machine learning techniques and weather data. Achieved 97% accuracy in predicting hourly electricity demand.\n\nKey Contributions:\n•\nUtilized historical data spanning 2020-2022 from ISO New England\n•\nEngineered features including temperature interactions, day classifications, and month variations\n•\nEmployed Random Forest and Linear Regression models for predictive analysis\n•\nIdentified strong seasonal trends and correlations between weather variables and energy consumption\n•\nAchieved 97% accuracy using Random Forest model\nOutcome:\nOptimized insights for energy providers and consumers, fostering operational efficiency and sustainable resource utilization.\n\nPython\nMachine Learning\nRandom Forest\nLinear Regression\nFeature Engineering\nTime Series\n\nShow Less\nTamil Library Management\nFeatured\nTamil Sangam\nJul 2023 – Sep 2023\nDeveloped a high-tech library system for Tamil textbooks using Angular, Flask, and PostgreSQL. Streamlined cataloging and access to Tamil literature, featured on local news channels.\n\nKey Contributions:\n•\nBuilt intuitive front-end using Angular\n•\nDeveloped robust back-end APIs with Flask\n•\nImplemented reliable database with PostgreSQL\n•\nCreated user-friendly interface for Tamil literature catalog\n•\nFeatured on local news channels for digitizing and managing Tamil literature\nAngular\nFlask\nPostgreSQL\nPython\nSQL\nStreamlit\nView Live Project\n\nShow Less\nWarehouse Visualization\nCapstone\nReal-Time Industry Project\n\nNokia\nJan 2020 – Mar 2020\nDeveloped a comprehensive warehouse visualization system for efficient inventory management and operations optimization. The system consists of three integrated components: Pick by Light, Verification System, and HAIPs (Human-AI Interaction Platforms). This real-time industry project successfully visualized all warehouse components and significantly increased factory production efficiency, proving especially beneficial during the COVID-19 lockdown period.\n\nKey Contributions:\n•\nDesigned and implemented Pick by Light system for efficient component picking and assembly operations\n•\nDeveloped verification system to ensure accuracy and quality control in warehouse operations\n•\nIntegrated HAIPs (Human-AI Interaction Platforms) for enhanced human-machine collaboration\n•\nCreated comprehensive visualization system that tracked and displayed all warehouse components in real-time\n•\nOptimized warehouse operations leading to increased production efficiency during critical periods\nOutcome:\nSuccessfully delivered a real-time warehouse visualization system that integrated Pick by Light, Verification System, and HAIPs components. The system significantly increased factory production efficiency and proved invaluable during the COVID-19 lockdown, enabling continued operations with improved inventory management and operational optimization.\n\nData Visualization\nPython\nReal-Time Systems\nInventory Management\nHAIPs\nPick by Light\nView Demo Video\n\nShow Less\nE-Delivery Kart\nSRM University\nAug 2019 – Dec 2019\nIntelligent delivery system that predicts demand requirements, retrieves components, and validates against demand specifications.\n\nPython\nMachine Learning\nIoT\n\nShow Less\nPick to Light\nNokia\nNov 2019 – Dec 2019\nKitting project system for efficient component picking and assembly operations.\n\nPyTorch\nComputer Vision\n\nShow Less\nI-CAR (Intelligent Car)\nCapstone\nPublished in Journal of Physics: Conference Series, Volume 1804\n\nSRM University\nJul 2016 – Nov 2016\nINTELLIGENT CAR (ICAR) is a car developed on eye-tracking software using a camera. The ICAR is the first Intelligent car that works with eye control and automatic driving. You can ride a car and move around wherever you want. The car drives Right, left, forward and stop using your eyes with the help of camera and coding. The main advantage is the car drives without any hassle in the roadways because of sensors i.e without any accidents/hitting any objects. Physically challenged people can also travel easily by I-Car, they need not call any person for help on the roads or depend on anyone to move from one place to another.\n\nKey Contributions:\n•\nDeveloped the first intelligent car system with eye-tracking control using camera technology\n•\nImplemented automatic driving capabilities with sensor-based obstacle detection and prevention\n•\nCreated eye-controlled navigation system (Right, Left, Forward, Stop) for hands-free operation\n•\nDesigned system to assist physically challenged individuals with independent mobility\n•\nPublished research paper in Journal of Physics: Conference Series (ICMAICT 2020)\nOutcome:\nSuccessfully developed and published the first intelligent car system with eye-tracking control, enabling hands-free navigation and independent mobility for physically challenged individuals. The research paper was published in the Journal of Physics: Conference Series, Volume 1804, with 595+ total downloads, contributing to the advancement of assistive technology and autonomous vehicle research.\n\nIoT\nEmbedded Systems\nComputer Vision\nEye-Tracking\nSensor Technology\nView Published Paper\n\nShow Less\nEducation\nSU\nMaster of Science in Data Science (MSDS)\nSeattle University\n\nSeattle, WA, USA\n\n2023 - 2025\nCourses: Big Data, Machine Learning, LLM, Data Visualization, Database, Advanced ML, Statistics, AWS, Predictive Modeling, Data Engineering\n\nSRM\nBachelor of Technology in Electronics and Communication Engineering (ECE)\nSRM Institute of Science & Technology\n\nChennai, Tamil Nadu, India\n\n2016 - 2020\nCourses: IoT, Database, Sensors, Machine Learning, Computer Vision, Azure, Python, Embedded Systems, Digital Signal Processing\n\nCertifications\n✓\nData Science (IBM)\nIBM\n\nData Science\n✓\nAzure Fundamentals (AZ-900)\nMicrosoft\n\nCloud\n✓\nData Fundamentals (DP-900)\nMicrosoft\n\nCloud\n✓\nData Scientist\nDataCamp\n\nData Science\n✓\nReact Development\nMicrosoft\n\nWeb Development\n✓\nFundamentals of Digital Marketing\nGoogle\n\nMarketing\n✓\nGoogle Ads Apps Certification\nGoogle\n\nMarketing\n✓\nYouTube Creative Essentials\nGoogle\n\nMarketing\n✓\nGoogle Analytics for Beginners\nGoogle\n\nMarketing\nAchievements & Awards\nRecognitions and accomplishments throughout my academic and professional journey\n\nTop Achievements\nACCENTURE\nGamified Performer #1\nGamified Performer\n\nAccenture\n\nRecent\n\nNASA SPACE APP CH...\nGalactic Programmer #1\nGalactic Programmer\n\nNASA Space App Challenge\n\n2020\n\nSRMIST\nTop 10 Icon #1\nTop 10 Icon of ECE\n\nSRMIST\n\n2020\n\nOther Achievements\n1st Place\n2020\nFirst Place - NASA Space App Challenge\nNASA, IET, and CLN\n\nSpace Technology\n1st Place\n2020\nBest Paper 2020\nREACT 2020 - SRMIST\n\nResearch\n1st Place\n2019\nFirst Place - Paper Presentation\nElectro Focus '19 - Madras Institute of Technology\n\nAcademic\n1st Place\n2018\nFirst Place - Paper Presentation\nUpagaraha 2K18 - Sri Venkateswara College of Engineering\n\nAcademic\n1st Place\n2018\nFirst Place - Project Display & Paper Presentation\nCHARGE'18 - Hindustan Institute of Science and Technology\n\nAcademic\n1st Place\n2018\nFirst Position - Paper Presentation\nTechzeal 2K18 - Sathyabama Institute of Science and Technology\n\nAcademic\n1st Place\n2018\nFirst Place - Paper Presentation\nTechnovit - VIT\n\nAcademic\n1st Place\n2018\nFirst Place - Interview\nRajalakshmi IST\n\nCareer\n2nd Place\n2018\nSecond Place - Paper Presentation\nEclectic 2K18 - SRM Ramapuram Campus\n\nAcademic\n2nd Place\n2019\nSecond Place - Paper Presentation\nDaksh'19 - SASTRA University (Thanjavur)\n\nAcademic\n2nd Place\n2019\nSecond Place - Project Display\nMadras Institute of Technology\n\nAcademic\n3rd Place\n2018\nThird Place - Paper Presentation\nInvente 3.0 - SSN College\n\nAcademic\n\nShow Less\nTestimonials\nWhat our users say\nSee what colleagues and clients have to say about working with me.\n\nSurya's telemetry-driven analytics infrastructure transformed our system monitoring. The anomaly detection system reduced troubleshooting time by 40% and improved our operational efficiency significantly.\n🚀\nSarah Chen\nSenior Data Engineer\nWorking with Surya on the LLM-based search optimization was exceptional. His model improved query relevance by 14%, enhancing user experience for our 10K+ daily users.\n✨\nMichael Rodriguez\nProduct Manager\nThe Fabric-integrated compliance analytics platform Surya built was a game-changer. It cut our compliance reporting time by 65% while maintaining the highest security standards.\n🛡️\nEmily Watson\nCompliance Director\nSurya's telemetry-driven analytics infrastructure transformed our system monitoring. The anomaly detection system reduced troubleshooting time by 40% and improved our operational efficiency significantly.\n🚀\nSarah Chen\nSenior Data Engineer\nWorking with Surya on the LLM-based search optimization was exceptional. His model improved query relevance by 14%, enhancing user experience for our 10K+ daily users.\n✨\nMichael Rodriguez\nProduct Manager\nThe Fabric-integrated compliance analytics platform Surya built was a game-changer. It cut our compliance reporting time by 65% while maintaining the highest security standards.\n🛡️\nEmily Watson\nCompliance Director\nSurya's forecasting models using XGBoost improved our prediction accuracy by 20%, enabling proactive scaling and better resource management. Outstanding technical expertise.\n📊\nDavid Kim\nCTO\nThe automated data pipelines Surya developed using Azure Data Factory streamlined our data processing by 30% and reduced manual errors by 40%. Highly professional work.\n⚡\nJennifer Martinez\nData Operations Lead\nSurya's Power BI dashboards with automated alerts enhanced visibility of our operational KPIs by 60%. The real-time insights have been invaluable for decision-making.\n📈\nAlex Thompson\nBusiness Intelligence Manager\nSurya's forecasting models using XGBoost improved our prediction accuracy by 20%, enabling proactive scaling and better resource management. Outstanding technical expertise.\n📊\nDavid Kim\nCTO\nThe automated data pipelines Surya developed using Azure Data Factory streamlined our data processing by 30% and reduced manual errors by 40%. Highly professional work.\n⚡\nJennifer Martinez\nData Operations Lead\nSurya's Power BI dashboards with automated alerts enhanced visibility of our operational KPIs by 60%. The real-time insights have been invaluable for decision-making.\n📈\nAlex Thompson\nBusiness Intelligence Manager\nThe benchmarking framework Surya designed improved our data quality by 20% and enabled faster decision-making. His attention to detail and technical depth are impressive.\n🎯\nRobert Lee\nData Quality Director\nSurya's IoT anomaly detection models improved detection accuracy by 10% for our real-time device telemetry. His expertise in Azure Stream Analytics is exceptional.\n🔍\nLisa Anderson\nIoT Solutions Architect\nThe semantic search pipelines Surya engineered using LLMs and Databricks optimized our marketplace query performance significantly. Excellent problem-solving skills.\n🧠\nJames Wilson\nSearch Platform Lead\nThe benchmarking framework Surya designed improved our data quality by 20% and enabled faster decision-making. His attention to detail and technical depth are impressive.\n🎯\nRobert Lee\nData Quality Director\nSurya's IoT anomaly detection models improved detection accuracy by 10% for our real-time device telemetry. His expertise in Azure Stream Analytics is exceptional.\n🔍\nLisa Anderson\nIoT Solutions Architect\nThe semantic search pipelines Surya engineered using LLMs and Databricks optimized our marketplace query performance significantly. Excellent problem-solving skills.\n🧠\nJames Wilson\nSearch Platform Lead\nGet In Touch\nI'm always open to discussing new data science projects, analytics opportunities, or collaborations in the field of data engineering and machine learning.\n\nEmail\nsairamsuryakailash@gmail.com\n\nLinkedIn\nlinkedin.com/in/suryakailash\n\nGitHub\ngithub.com/suryakailash-risk\n\n© 2025 Surya Kailash Ramesh. All rights reserved.\n\nBuilt with React, TypeScript & Tailwind CSS",
+  "additional_info": {}
+}
