@@ -46,8 +46,8 @@ cd backend
 # Install Python dependencies
 pip install -r ../requirements.txt
 
-# Create .env file
-cp .env.example .env
+# Create .env file (this repo ships `env.example.txt`)
+cp env.example.txt .env
 ```
 
 Edit `.env` file with your email credentials:
