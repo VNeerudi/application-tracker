@@ -1,13 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Body
+from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Body, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List, Optional, Set
 from datetime import datetime
 import uvicorn
 import os
 import shutil
 from pathlib import Path
+import secrets
 
 from database import get_db, init_db
 from models import Application, ApplicationCreate, ApplicationUpdate, ApplicationResponse
@@ -18,6 +19,24 @@ from user_profile import UserProfile
 from config import settings
 
 app = FastAPI(title="Job Application Tracker API")
+
+# In-memory store of active auth tokens (simple local auth)
+ACTIVE_TOKENS: Set[str] = set()
+
+
+def require_auth(authorization: Optional[str] = Header(None)) -> str:
+    """
+    Very simple auth guard for local use.
+    Expects header: Authorization: Bearer <token>
+    """
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    token = authorization.split(" ", 1)[1].strip()
+    if token not in ACTIVE_TOKENS:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+    return settings.auth_username
 
 # CORS middleware for React frontend
 app.add_middleware(
@@ -49,12 +68,46 @@ app.mount("/resumes", StaticFiles(directory="resumes"), name="resumes")
 async def root():
     return {"message": "Job Application Tracker API"}
 
+
+@app.post("/api/login")
+async def login(credentials: dict = Body(...)):
+    """
+    Simple login endpoint for local dashboard access.
+    Compares provided username/password with configured values.
+    """
+    username = credentials.get("username")
+    password = credentials.get("password")
+
+    if not username or not password:
+        raise HTTPException(status_code=400, detail="Username and password are required")
+
+    if username != settings.auth_username or password != settings.auth_password:
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+
+    token = secrets.token_urlsafe(32)
+    ACTIVE_TOKENS.add(token)
+
+    return {"access_token": token, "token_type": "bearer"}
+
+
+@app.post("/api/logout")
+async def logout(authorization: Optional[str] = Header(None)):
+    """
+    Logout endpoint - invalidates the current token.
+    """
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ", 1)[1].strip()
+        ACTIVE_TOKENS.discard(token)
+
+    return {"message": "Logged out"}
+
 @app.get("/api/applications", response_model=List[ApplicationResponse])
 def get_applications(
     skip: int = 0,
     limit: int = 100,
     status: Optional[str] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
 ):
     """Get all job applications with optional filtering"""
     query = db.query(Application)
@@ -66,7 +119,11 @@ def get_applications(
     return applications
 
 @app.get("/api/applications/{application_id}", response_model=ApplicationResponse)
-def get_application(application_id: int, db: Session = Depends(get_db)):
+def get_application(
+    application_id: int,
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Get a specific application by ID"""
     application = db.query(Application).filter(Application.id == application_id).first()
     if not application:
@@ -74,7 +131,11 @@ def get_application(application_id: int, db: Session = Depends(get_db)):
     return application
 
 @app.post("/api/applications", response_model=ApplicationResponse)
-def create_application(application: ApplicationCreate, db: Session = Depends(get_db)):
+def create_application(
+    application: ApplicationCreate,
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Create a new job application"""
     db_application = Application(**application.dict())
     db.add(db_application)
@@ -83,7 +144,10 @@ def create_application(application: ApplicationCreate, db: Session = Depends(get
     return db_application
 
 @app.post("/api/upload-image")
-async def upload_image(file: UploadFile = File(...)):
+async def upload_image(
+    file: UploadFile = File(...),
+    current_user: str = Depends(require_auth),
+):
     """Upload an image and extract job information"""
     try:
         # Validate file type
@@ -125,7 +189,8 @@ async def upload_image(file: UploadFile = File(...)):
 def update_application(
     application_id: int,
     application: ApplicationUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
 ):
     """Update an existing application"""
     try:
@@ -206,7 +271,11 @@ def update_application(
         raise HTTPException(status_code=500, detail=f"Error updating application: {str(e)}")
 
 @app.delete("/api/applications/{application_id}")
-def delete_application(application_id: int, db: Session = Depends(get_db)):
+def delete_application(
+    application_id: int,
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Delete an application"""
     db_application = db.query(Application).filter(Application.id == application_id).first()
     if not db_application:
@@ -217,7 +286,10 @@ def delete_application(application_id: int, db: Session = Depends(get_db)):
     return {"message": "Application deleted successfully"}
 
 @app.post("/api/sync-emails")
-def sync_emails(db: Session = Depends(get_db)):
+def sync_emails(
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Sync emails and extract job application information"""
     try:
         processor = EmailProcessor()
@@ -230,7 +302,13 @@ def sync_emails(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Error syncing emails: {str(e)}")
 
 @app.get("/api/emails")
-def list_emails(days_back: int = 0, limit: int = 50, unread_only: bool = False, db: Session = Depends(get_db)):
+def list_emails(
+    days_back: int = 0,
+    limit: int = 50,
+    unread_only: bool = False,
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """List job-related emails from today (or last N days), optionally only unread emails"""
     try:
         processor = EmailProcessor()
@@ -240,7 +318,11 @@ def list_emails(days_back: int = 0, limit: int = 50, unread_only: bool = False, 
         raise HTTPException(status_code=500, detail=f"Error listing emails: {str(e)}")
 
 @app.post("/api/process-email/{email_id}")
-def process_email(email_id: str, db: Session = Depends(get_db)):
+def process_email(
+    email_id: str,
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Process a specific email, extract details, and update application if rejection"""
     try:
         processor = EmailProcessor()
@@ -372,7 +454,10 @@ def process_email(email_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Error processing email: {str(e)}")
 
 @app.get("/api/stats")
-def get_stats(db: Session = Depends(get_db)):
+def get_stats(
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Get statistics about applications"""
     total = db.query(Application).count()
     pending = db.query(Application).filter(Application.status == "pending").count()
@@ -389,7 +474,11 @@ def get_stats(db: Session = Depends(get_db)):
     }
 
 @app.post("/api/resume/generate")
-def generate_resume(job_description: dict = Body(...), db: Session = Depends(get_db)):
+def generate_resume(
+    job_description: dict = Body(...),
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Generate a resume from job description"""
     try:
         jd_text = job_description.get("job_description", "")
@@ -416,7 +505,11 @@ def generate_resume(job_description: dict = Body(...), db: Session = Depends(get
         raise HTTPException(status_code=500, detail=f"Error generating resume: {str(e)}")
 
 @app.post("/api/resume/create-pdf")
-def create_resume_pdf(resume_request: dict = Body(...), db: Session = Depends(get_db)):
+def create_resume_pdf(
+    resume_request: dict = Body(...),
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Create PDF from resume data and save it to an application"""
     try:
         resume_data = resume_request.get("resume_data")
@@ -463,7 +556,11 @@ def create_resume_pdf(resume_request: dict = Body(...), db: Session = Depends(ge
         raise HTTPException(status_code=500, detail=f"Error creating PDF: {str(e)}")
 
 @app.get("/api/resume/{application_id}")
-def get_resume(application_id: int, db: Session = Depends(get_db)):
+def get_resume(
+    application_id: int,
+    db: Session = Depends(get_db),
+    current_user: str = Depends(require_auth),
+):
     """Get resume path for an application"""
     try:
         application = db.query(Application).filter(Application.id == application_id).first()
@@ -483,7 +580,7 @@ def get_resume(application_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Error retrieving resume: {str(e)}")
 
 @app.get("/api/user-profile")
-def get_user_profile():
+def get_user_profile(current_user: str = Depends(require_auth)):
     """Get user profile/personal details"""
     try:
         profile = UserProfile()
@@ -492,7 +589,10 @@ def get_user_profile():
         raise HTTPException(status_code=500, detail=f"Error retrieving profile: {str(e)}")
 
 @app.post("/api/user-profile")
-def save_user_profile(profile_data: dict = Body(...)):
+def save_user_profile(
+    profile_data: dict = Body(...),
+    current_user: str = Depends(require_auth),
+):
     """Save user profile/personal details"""
     try:
         profile = UserProfile()
@@ -507,7 +607,10 @@ def save_user_profile(profile_data: dict = Body(...)):
         raise HTTPException(status_code=500, detail=f"Error saving profile: {str(e)}")
 
 @app.post("/api/extract-from-portfolio")
-def extract_from_portfolio(portfolio_data: dict = Body(...)):
+def extract_from_portfolio(
+    portfolio_data: dict = Body(...),
+    current_user: str = Depends(require_auth),
+):
     """Extract information from portfolio text using local Ollama model (gemma3:4b)"""
     try:
         portfolio_text = portfolio_data.get("portfolio_text", "")

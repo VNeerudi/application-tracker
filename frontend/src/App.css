@@ -517,6 +517,42 @@
   animation: spin 2s linear infinite;
 }
 
+.login-container {
+  max-width: 420px;
+  margin: 80px auto;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+}
+
+.app.dark .login-container {
+  background: #1f2937;
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.login-form .form-group input {
+  background: #f8fafc;
+}
+
+.app.dark .login-form .form-group input {
+  background: #111827;
+  color: #e5e7eb;
+  border-color: #374151;
+}
+
+.login-error {
+  margin-bottom: 12px;
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

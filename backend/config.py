@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     
     # Database
     database_url: str = "sqlite:///./job_applications.db"
+
+    # Simple auth (for local dashboard access)
+    auth_username: str = "admin"
+    auth_password: str = "admin"  # Override in .env for better security
     
     class Config:
         env_file = ".env"

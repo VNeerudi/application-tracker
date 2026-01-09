@@ -63,6 +63,23 @@ function App() {
   const [userProfile, setUserProfile] = useState(null)
   const [loadingProfile, setLoadingProfile] = useState(false)
   const [extractingPortfolio, setExtractingPortfolio] = useState(false)
+  const [authToken, setAuthToken] = useState(() => {
+    return localStorage.getItem('authToken') || null
+  })
+  const [loginForm, setLoginForm] = useState({ username: '', password: '' })
+  const [loggingIn, setLoggingIn] = useState(false)
+  const [loginError, setLoginError] = useState('')
+
+  // Attach auth token to all axios requests
+  useEffect(() => {
+    if (authToken) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
+      localStorage.setItem('authToken', authToken)
+    } else {
+      delete axios.defaults.headers.common['Authorization']
+      localStorage.removeItem('authToken')
+    }
+  }, [authToken])
 
   const processImageFile = useCallback(async (file) => {
     // Validate file type
@@ -113,9 +130,10 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (!authToken) return
     fetchApplications()
     fetchStats()
-  }, [filter])
+  }, [filter, authToken])
 
   useEffect(() => {
     // Handle paste event when form is open
@@ -181,6 +199,38 @@ function App() {
     } finally {
       setSyncing(false)
     }
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    setLoggingIn(true)
+    setLoginError('')
+    try {
+      const response = await axios.post(`${API_BASE}/login`, {
+        username: loginForm.username,
+        password: loginForm.password
+      })
+      setAuthToken(response.data.access_token)
+      setLoading(true)
+      await fetchApplications()
+      await fetchStats()
+    } catch (error) {
+      setLoginError(error.response?.data?.detail || 'Login failed')
+    } finally {
+      setLoggingIn(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${API_BASE}/logout`)
+    } catch (e) {
+      // ignore
+    }
+    setAuthToken(null)
+    setApplications([])
+    setStats({})
+    setLoading(false)
   }
 
   const fetchEmails = async () => {
@@ -662,6 +712,43 @@ function App() {
     setIsDark(newValue)
   }
 
+  if (!authToken) {
+    return (
+      <div className={`app ${isDark ? 'dark' : ''}`}>
+        <LightPullThemeSwitcher isDark={isDark} onThemeToggle={handleThemeToggle} />
+        <div className="main-content">
+          <div className="login-container">
+            <h1 className="login-title">Job Application Tracker</h1>
+            <form className="login-form" onSubmit={handleLogin}>
+              <div className="form-group">
+                <label>Username</label>
+                <input
+                  type="text"
+                  value={loginForm.username}
+                  onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  value={loginForm.password}
+                  onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                  required
+                />
+              </div>
+              {loginError && <div className="login-error">{loginError}</div>}
+              <button type="submit" className="btn btn-primary" disabled={loggingIn}>
+                {loggingIn ? 'Logging in...' : 'Login'}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (loading) {
     return <div className="loading">Loading...</div>
   }
@@ -684,6 +771,14 @@ function App() {
       <div className="main-content">
       <header className="header">
         <h1>Job Application Tracker</h1>
+        <div className="header-actions">
+          <button
+            className="btn btn-secondary btn-small"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
       </header>
 
       {currentPage === 'resume-builder' ? (
@@ -1281,104 +1376,6 @@ function App() {
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label style={{ marginBottom: '12px', display: 'block' }}>📸 Upload or Paste Job Posting Image (Auto-fill form)</label>
-                <div style={{
-                  border: '2px dashed #3b82f6',
-                  borderRadius: '12px',
-                  padding: '32px 20px',
-                  textAlign: 'center',
-                  background: 'linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%)',
-                  marginBottom: '16px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#2563eb';
-                  e.currentTarget.style.transform = 'scale(1.01)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#3b82f6';
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-                  onPaste={(e) => {
-                    e.preventDefault()
-                    const items = e.clipboardData?.items
-                    if (items) {
-                      for (let i = 0; i < items.length; i++) {
-                        const item = items[i]
-                        if (item.type.indexOf('image') !== -1) {
-                          const blob = item.getAsFile()
-                          if (blob) {
-                            processImageFile(blob)
-                          }
-                          break
-                        }
-                      }
-                    }
-                  }}
-                  onClick={() => document.getElementById('file-input')?.click()}
-                >
-                  <div style={{ fontSize: '48px', marginBottom: '12px' }}>📎</div>
-                  <p style={{ margin: '0 0 8px 0', color: '#475569', fontSize: '15px', fontWeight: '500' }}>
-                    Click to upload or <strong style={{ color: '#3b82f6' }}>Ctrl+V / Cmd+V</strong> to paste screenshot
-                  </p>
-                  <p style={{ margin: 0, color: '#94a3b8', fontSize: '13px' }}>
-                    Supports PNG, JPG, and other image formats
-                  </p>
-                  <input
-                    id="file-input"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                    style={{ display: 'none' }}
-                  />
-                </div>
-                {uploadingImage && (
-                  <div style={{ 
-                    color: '#3b82f6', 
-                    marginTop: '16px', 
-                    padding: '12px',
-                    background: '#eff6ff',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontWeight: '500'
-                  }}>
-                    <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⏳</span>
-                    Processing image with AI...
-                  </div>
-                )}
-                {imagePreview && (
-                  <div style={{ 
-                    marginTop: '16px',
-                    padding: '8px',
-                    background: '#f8fafc',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0'
-                  }}>
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '250px', 
-                        borderRadius: '8px', 
-                        border: '1px solid #e2e8f0',
-                        display: 'block',
-                        margin: '0 auto'
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-
               <div className="form-row">
                 <div className="form-group">
                   <label>Company Name *</label>

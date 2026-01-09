@@ -1,10 +1,3 @@
-@echo off
 cd backend
-python main.py
-
-
-
-
-
-
-
+call venv\Scripts\activate
+python -m uvicorn main:app --reload

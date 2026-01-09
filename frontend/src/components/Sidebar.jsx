@@ -15,16 +15,6 @@ const Sidebar = ({ isDark, onThemeToggle, currentPage, onPageChange, onSyncEmail
           📋
         </div>
         
-        <div className="sidebar-icon" 
-             onClick={() => onPageChange('resume-builder')}
-             title="Resume Builder"
-             style={{ 
-               backgroundColor: currentPage === 'resume-builder' ? (isDark ? '#3b82f6' : '#e0e7ff') : 'transparent',
-               color: currentPage === 'resume-builder' ? (isDark ? '#fff' : '#3b82f6') : (isDark ? '#9ca3af' : '#6b7280')
-             }}>
-          📄
-        </div>
-        
         <div className="sidebar-divider" />
         
         {onSyncEmails && (

@@ -1,7 +1,7 @@
 import imaplib
 import email
 from email.header import decode_header
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 import re
 import ollama
@@ -113,6 +113,226 @@ class EmailProcessor:
         body = html_body if html_body else text_body
         
         return {"subject": subject, "body": body}
+    
+    def extract_linkedin_application(self, email_content: Dict[str, str], msg) -> Optional[Dict]:
+        """Extract job application information from LinkedIn confirmation emails"""
+        try:
+            # Check if email is from LinkedIn
+            sender = msg.get("From", "").lower()
+            if "linkedin" not in sender and "noreply@linkedin.com" not in sender:
+                return None
+            
+            body = email_content.get('body', '')
+            subject = email_content.get('subject', '')
+            
+            # Check for LinkedIn application confirmation pattern
+            # Pattern: "Your application was sent to [Company Name]"
+            linkedin_pattern = re.search(
+                r'Your application was sent to\s+([^\n\r<]+)',
+                body,
+                re.IGNORECASE
+            )
+            
+            if not linkedin_pattern:
+                return None
+            
+            company_name = linkedin_pattern.group(1).strip()
+            
+            # Extract job title - in LinkedIn emails, the pattern is:
+            # "Your application was sent to [Company]"
+            # [Company] (repeated)
+            # [Job Title] <- This is what we want
+            # [Company] · [Location] ([Work Type])
+            
+            position = None
+            
+            # Method 1: Look for text between company name repetition and location line
+            # Find the location pattern first
+            location_match = re.search(
+                rf'{re.escape(company_name)}\s*·\s*([^\(]+)\s*\(([^\)]+)\)',
+                body,
+                re.IGNORECASE
+            )
+            
+            if location_match:
+                # Get text before the location line
+                location_start = location_match.start()
+                before_location = body[:location_start]
+                
+                # Find the last occurrence of company name before location
+                company_positions = [m.start() for m in re.finditer(re.escape(company_name), before_location, re.IGNORECASE)]
+                
+                if company_positions:
+                    # Get text after the last company name occurrence
+                    after_last_company = before_location[company_positions[-1] + len(company_name):]
+                    # Remove HTML tags and get clean lines
+                    clean_text = re.sub(r'<[^>]+>', '', after_last_company)
+                    lines = [line.strip() for line in clean_text.split('\n') if line.strip()]
+                    
+                    # The job title should be the first substantial line that's not empty and not the company name
+                    for line in lines[:3]:
+                        clean_line = line.strip()
+                        if (clean_line and 
+                            clean_line.lower() != company_name.lower() and 
+                            len(clean_line) > 3 and
+                            '·' not in clean_line and 
+                            '(' not in clean_line and
+                            'applied on' not in clean_line.lower()):
+                            position = clean_line
+                            break
+            
+            # Method 2: Look for common HTML patterns (strong, b tags, etc.)
+            if not position:
+                job_title_patterns = [
+                    r'<strong[^>]*>([^<]+)</strong>',
+                    r'<b[^>]*>([^<]+)</b>',
+                    r'<h[1-6][^>]*>([^<]+)</h[1-6]>',
+                ]
+                
+                for pattern in job_title_patterns:
+                    matches = re.finditer(pattern, body, re.IGNORECASE)
+                    for match in matches:
+                        potential_title = match.group(1).strip()
+                        # Filter out company name and other non-job-title text
+                        if (potential_title.lower() != company_name.lower() and 
+                            len(potential_title) > 3 and
+                            'applied on' not in potential_title.lower() and
+                            '·' not in potential_title and
+                            '(' not in potential_title):
+                            position = potential_title
+                            break
+                    if position:
+                        break
+            
+            # Method 3: Fallback - look for lines that look like job titles
+            if not position:
+                # Get text after "Your application was sent to [Company]"
+                after_confirmation = body[linkedin_pattern.end():]
+                clean_text = re.sub(r'<[^>]+>', '', after_confirmation)
+                lines = [line.strip() for line in clean_text.split('\n') if line.strip()]
+                
+                for line in lines[:10]:  # Check first 10 lines
+                    clean_line = line.strip()
+                    if (clean_line and 
+                        clean_line.lower() != company_name.lower() and 
+                        len(clean_line) > 3 and
+                        '·' not in clean_line and 
+                        '(' not in clean_line and
+                        'applied on' not in clean_line.lower() and
+                        'now, take' not in clean_line.lower() and
+                        'view similar' not in clean_line.lower()):
+                        position = clean_line
+                        break
+            
+            # Extract location - pattern: "Company Name · Location (On-site/Hybrid/Remote)"
+            location_pattern = re.search(
+                rf'{re.escape(company_name)}\s*·\s*([^\(]+)\s*\(([^\)]+)\)',
+                body,
+                re.IGNORECASE
+            )
+            location = None
+            if location_pattern:
+                location = location_pattern.group(1).strip()
+                work_type = location_pattern.group(2).strip()  # On-site, Hybrid, Remote
+                if location:
+                    location = f"{location} ({work_type})"
+            
+            # Check if this is an Easy Apply application
+            is_easy_apply = 'easy apply' in body.lower() or 'easyapply' in body.lower()
+            
+            # For Easy Apply applications, use current date/time
+            if is_easy_apply:
+                applied_date = datetime.now().replace(second=0, microsecond=0)
+            else:
+                # Extract applied date - pattern: "Applied on [Date]"
+                date_patterns = [
+                    r'Applied on\s+([A-Za-z]+\s+\d{1,2},\s+\d{4})',
+                    r'Applied on\s+(\d{1,2}[/-]\d{1,2}[/-]\d{4})',
+                ]
+                
+                applied_date = None
+                for pattern in date_patterns:
+                    match = re.search(pattern, body, re.IGNORECASE)
+                    if match:
+                        date_str = match.group(1).strip()
+                        # Try parsing with datetime.strptime first (most common format)
+                        try:
+                            # Try "January 9, 2026" format
+                            applied_date = datetime.strptime(date_str, "%B %d, %Y")
+                            applied_date = applied_date.replace(hour=0, minute=0, second=0, microsecond=0)
+                        except ValueError:
+                            try:
+                                # Try "01/09/2026" format
+                                applied_date = datetime.strptime(date_str, "%m/%d/%Y")
+                                applied_date = applied_date.replace(hour=0, minute=0, second=0, microsecond=0)
+                            except ValueError:
+                                try:
+                                    # Try "01-09-2026" format
+                                    applied_date = datetime.strptime(date_str, "%m-%d-%Y")
+                                    applied_date = applied_date.replace(hour=0, minute=0, second=0, microsecond=0)
+                                except ValueError:
+                                    # Try dateutil as fallback if available
+                                    try:
+                                        from dateutil import parser as date_parser
+                                        applied_date = date_parser.parse(date_str)
+                                        if applied_date.tzinfo:
+                                            applied_date = applied_date.replace(tzinfo=None)
+                                        applied_date = applied_date.replace(hour=0, minute=0, second=0, microsecond=0)
+                                    except:
+                                        pass
+                        if applied_date:
+                            break
+                
+                # If no date found in body, use email date
+                if not applied_date:
+                    email_date = msg.get("Date")
+                    if email_date:
+                        try:
+                            from email.utils import parsedate_to_datetime
+                            applied_date = parsedate_to_datetime(email_date)
+                            if applied_date.tzinfo:
+                                applied_date = applied_date.replace(tzinfo=None)
+                            applied_date = applied_date.replace(hour=0, minute=0, second=0, microsecond=0)
+                        except:
+                            pass
+                
+                # If still no date, use today
+                if not applied_date:
+                    applied_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            # If position still not found, try to extract from subject or use a default
+            if not position:
+                # Sometimes the position is in the subject
+                if 'application' in subject.lower() and company_name.lower() in subject.lower():
+                    # Try to extract position from subject
+                    parts = subject.split(' - ')
+                    if len(parts) > 1:
+                        position = parts[-1].strip()
+                    else:
+                        position = "Not Specified"
+                else:
+                    position = "Not Specified"
+            
+            # Build notes
+            notes = "Application confirmation from LinkedIn"
+            if is_easy_apply:
+                notes += " (Easy Apply)"
+            
+            print(f"LinkedIn application detected: Company={company_name}, Position={position}, Location={location}, Date={applied_date}, Easy Apply={is_easy_apply}")
+            
+            return {
+                "company_name": company_name,
+                "position": position,
+                "location": location,
+                "applied_date": applied_date,
+                "status": "pending",
+                "source": "linkedin_email",
+                "notes": notes
+            }
+            
+        except Exception as e:
+            print(f"Error extracting LinkedIn application: {e}")
+            return None
     
     def extract_with_llm(self, email_content: Dict[str, str]) -> Optional[Dict]:
         """Use Ollama LLM to extract job application information from email"""
@@ -255,7 +475,6 @@ Return ONLY valid JSON, no additional text. If information is not available, use
         mail.select("INBOX")
         
         # Search for emails from today (or specified days back)
-        from datetime import timedelta
         date_since = (datetime.now() - timedelta(days=days_back)).strftime("%d-%b-%Y")
         status, messages = mail.search(None, f'(SINCE {date_since})')
         
@@ -267,7 +486,8 @@ Return ONLY valid JSON, no additional text. If information is not available, use
             "application", "applied", "interview", "rejection", "job", "position", 
             "hiring", "candidate", "thank you for applying", "thank you for your application",
             "next steps", "thank you for", "your application", "we received", "received your application",
-            "thank you for applying", "position", "role", "opportunity"
+            "thank you for applying", "position", "role", "opportunity", "linkedin",
+            "application was sent", "your application was sent"
         ]
         
         for email_id in email_ids[-50:]:  # Process last 50 emails
@@ -290,11 +510,9 @@ Return ONLY valid JSON, no additional text. If information is not available, use
                         email_date = email_date.replace(hour=0, minute=0, second=0, microsecond=0)
                     except:
                         # Fallback to yesterday if parsing fails
-                        from datetime import timedelta
                         email_date = (datetime.now() - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
                 else:
                     # Default to yesterday if no date
-                    from datetime import timedelta
                     email_date = (datetime.now() - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
                 
                 # Check if email is job-related
@@ -310,8 +528,12 @@ Return ONLY valid JSON, no additional text. If information is not available, use
                     if existing:
                         continue
                     
-                    # Extract information using LLM
-                    extracted_data = self.extract_with_llm(email_content)
+                    # First, try to extract LinkedIn application (special case)
+                    extracted_data = self.extract_linkedin_application(email_content, msg)
+                    
+                    # If not a LinkedIn email, use LLM extraction
+                    if not extracted_data:
+                        extracted_data = self.extract_with_llm(email_content)
                     
                     # Debug: Print extraction results
                     if extracted_data:
@@ -346,7 +568,7 @@ Return ONLY valid JSON, no additional text. If information is not available, use
                             job_url=extracted_data.get('job_url'),
                             contact_email=extracted_data.get('contact_email'),
                             location=extracted_data.get('location'),
-                            source="email",
+                            source=extracted_data.get('source', 'email'),
                             email_id=email_id.decode(),
                             applied_date=applied_date
                         )
@@ -377,7 +599,6 @@ Return ONLY valid JSON, no additional text. If information is not available, use
         mail.select("INBOX")
         
         # Search for emails from today (or specified days back)
-        from datetime import timedelta
         date_since = (datetime.now() - timedelta(days=days_back)).strftime("%d-%b-%Y")
         
         # Build search criteria
@@ -397,7 +618,8 @@ Return ONLY valid JSON, no additional text. If information is not available, use
             "application", "applied", "interview", "rejection", "job", "position", 
             "hiring", "candidate", "thank you for applying", "thank you for your application",
             "next steps", "thank you for", "your application", "we received", "received your application",
-            "offer", "accepted", "declined", "role", "opportunity"
+            "offer", "accepted", "declined", "role", "opportunity", "linkedin",
+            "application was sent", "your application was sent"
         ]
         
         # Get last N emails and reverse to show newest first
@@ -435,11 +657,9 @@ Return ONLY valid JSON, no additional text. If information is not available, use
                             email_date = email_date.replace(hour=0, minute=0, second=0, microsecond=0)
                         except:
                             # Fallback to yesterday if parsing fails
-                            from datetime import timedelta
                             email_date = (datetime.now() - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
                     else:
                         # Default to yesterday if no date
-                        from datetime import timedelta
                         email_date = (datetime.now() - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
                     
                     # Get sender
@@ -501,8 +721,12 @@ Return ONLY valid JSON, no additional text. If information is not available, use
             
             email_content = self.parse_email_content(msg)
             
-            # Extract information using LLM
-            extracted_data = self.extract_with_llm(email_content)
+            # First, try to extract LinkedIn application (special case)
+            extracted_data = self.extract_linkedin_application(email_content, msg)
+            
+            # If not a LinkedIn email, use LLM extraction
+            if not extracted_data:
+                extracted_data = self.extract_with_llm(email_content)
             
             if not extracted_data:
                 return None
@@ -519,11 +743,9 @@ Return ONLY valid JSON, no additional text. If information is not available, use
                     email_date = email_date.replace(hour=0, minute=0, second=0, microsecond=0)
                 except:
                     # Fallback to yesterday if parsing fails
-                    from datetime import timedelta
                     email_date = (datetime.now() - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
             else:
                 # Default to yesterday if no date
-                from datetime import timedelta
                 email_date = (datetime.now() - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
             
             # Check if it's a rejection
