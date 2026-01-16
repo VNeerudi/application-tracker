@@ -5,7 +5,8 @@ import './App.css'
 import Sidebar from './components/Sidebar'
 import { LightPullThemeSwitcher } from './components/ui/LightPullThemeSwitcher'
 
-const API_BASE = 'http://localhost:8000/api'
+// Use relative API base so Vite proxy (and Codespaces) work correctly
+const API_BASE = '/api'
 
 function App() {
   const [applications, setApplications] = useState([])
